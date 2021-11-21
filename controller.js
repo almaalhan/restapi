@@ -48,3 +48,43 @@ exports.add_data_user = function (req, res) {
         }
     });
 }
+
+
+// delete data user by id
+exports.delete_data_user = function (req, res) {
+    // var nama = req.body.nama;
+    var username = req.body.username;
+    // console.log(nama);
+    // console.log(username);
+    connection.query("DELETE from user where username = '" + username + "'", function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok("User Berhasil dihapus", res);
+        }
+    });
+}
+
+// tampilkan data grup matakuliah
+exports.get_matkul = function (req, res) {
+    connection.query("SELECT " +
+        "mhs.nama," +
+        "mhs.nim," +
+        "mhs.semester," +
+        "d.kode_matkul," +
+        "d.jumlah_sks," +
+        "m.nama_matkul," +
+        "ds.nama AS nama_dosen" +
+        " FROM detail_matkul_diambil d" +
+        " JOIN header_matkul_diambil h ON h.id_header_matkul_diambil = d.id_header" +
+        " JOIN matkul m ON m.kode_matkul = d.kode_matkul" +
+        " JOIN detail_jadwal_krs j ON j.id_detail_jadwal = d.id_jadwal" +
+        " JOIN`user` ds ON ds.nidn = d.nidn_dosen" +
+        " JOIN`user` mhs ON mhs.nim = h.nim_mhs", function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.oknested(rows, res);
+            }
+        });
+}
