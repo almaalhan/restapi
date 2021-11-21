@@ -9,4 +9,5 @@ module.exports = function (app) {
     app.route('/add_data_user').post(json.add_data_user);
     app.route('/delete_data_user').post(json.delete_data_user);
     app.route('/get_matkul').post(json.get_matkul);
+    app.route('/login').post(json.login);
 }

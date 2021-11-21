@@ -2,8 +2,8 @@
 
 var response = require('./res');
 var connection = require('./koneksi');
-
-
+// var passwordHash = require('password-hash');
+const { passwordHash, passwordVerify, } = require('nodejs-password');
 
 exports.index = function (req, res) {
     response.ok("Aplikasi berhasil", res);
@@ -87,4 +87,33 @@ exports.get_matkul = function (req, res) {
                 response.oknested(rows, res);
             }
         });
+}
+
+exports.login = function (req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+    var hash = '';
+    // var hashedPassword = passwordHash.generate(password);
+    var query = "SELECT " +
+        "password," +
+        "salt," +
+        "paper " +
+        "FROM" +
+        "`user` " +
+        "WHERE " +
+        "username = '" + username + "'";
+    connection.query(query, function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(rows.salt);
+            response.ok(rows, res);
+            // try {
+            //     let hash = await passwordHash(password, );
+            //     // Store hash in your password DB.
+            // } catch (error) {
+            //     // handle errors
+            // }
+        }
+    });
 }
